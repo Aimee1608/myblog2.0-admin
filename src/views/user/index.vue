@@ -29,6 +29,28 @@
                            align="center"
                            label="用户名">
           </el-table-column>
+          <el-table-column prop="webBlogName"
+                           align="center"
+                           label="博客">
+          </el-table-column>
+          <el-table-column prop="webBlog"
+                           align="center"
+                           label="博客地址">
+          </el-table-column>
+          <el-table-column prop="webBlogDesc"
+                           align="center"
+                           label="博客描述">
+          </el-table-column>
+          <el-table-column align="center"
+                           label="博客Icon">
+            <template #default="scope">
+              <img :src="scope.row.webBlogIcon" />
+            </template>
+          </el-table-column>
+          <el-table-column prop="webBlogState"
+                           align="center"
+                           label="博客推荐状态">
+          </el-table-column>
           <el-table-column label="权限"
                            align="center">
             <template #default="scope">
@@ -61,7 +83,7 @@
       </el-pagination>
     </div>
     <el-dialog title="编辑权限"
-               :visible.sync="dialogFormVisible">
+               v-model="dialogFormVisible">
       <el-form :rules="form"
                ref="form"
                :model="logType">
@@ -79,13 +101,14 @@
           </el-select>
         </el-form-item>
       </el-form>
-      <div slot="footer"
-           class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary"
-                   v-loading.fullscreen.lock="fullscreenLoading"
-                   @click="handleSure">确 定</el-button>
-      </div>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button @click="dialogFormVisible = false">取 消</el-button>
+          <el-button type="primary"
+                     v-loading.fullscreen.lock="fullscreenLoading"
+                     @click="handleSure">确 定</el-button>
+        </div>
+      </template>
     </el-dialog>
   </div>
 </template>
@@ -153,7 +176,7 @@ export default {
       this.dialogFormVisible = true
     },
     async handleSure() {
-      const res = await editStatus(this.editItem._id, { status: this.editItem.status })
+      const res = await editStatus({ _id: this.editItem._id, status: this.editItem.status })
       if (+res.code === 0) {
         this.editItem = {}
         this.$message('编辑成功')

@@ -35,8 +35,8 @@
                       class="editor" />
           </el-col>
           <el-col :span="12">
-            <div class="show"
-                 v-html="contentValue" />
+            <Content class="show"
+                     :content="info.content" />
           </el-col>
         </el-row>
       </el-form-item>
@@ -60,29 +60,14 @@
 </template>
 
 <script>
-import Marked from 'marked'
-import hljs from 'highlight.js'
-import 'highlight.js/styles/monokai-sublime.css'
+
 import articleAPI from '@/api/article'
 import articleCateAPI from '@/api/articleCate'
-Marked.setOptions({
-  renderer: new Marked.Renderer(),
-  highlight(code) {
-    return hljs.highlightAuto(code).value
-  },
-  pedantic: false,
-  gfm: true,
-  tables: true,
-  breaks: false,
-  sanitize: false,
-  smartLists: true,
-  smartypants: false,
-  xhtml: false
-})
+import Content from './components/content'
 export default {
   name: 'AddArticle',
   components: { // 定义组件
-
+    Content
   },
   data() {
     return {
@@ -108,9 +93,7 @@ export default {
     }
   },
   computed: {
-    contentValue() {
-      return Marked(this.info.content)
-    }
+
   },
   async created() { // 生命周期函数
     this.id = this.$route.query.id

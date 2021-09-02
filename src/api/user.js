@@ -38,10 +38,10 @@ export function getUserListPage(params) {
   })
 }
 
-export function editStatus(id, data) {
+export function editStatus(data) {
   return request({
-    url: `${PATH}/${id}`,
-    method: 'put',
+    url: `${PATH}/editRole`,
+    method: 'post',
     data
   })
 }

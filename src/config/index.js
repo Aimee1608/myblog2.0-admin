@@ -1,14 +1,7 @@
-import dev from './dev.js'
-import prod from './prod.js'
-// console.log('dev', dev)
-const configs = {
-  dev,
-  prod
+const GITHUB_OAUTH = {
+  url: 'https://github.com/login/oauth/authorize?client_id=7dd33c1a56813db7f797&state=admin',
+  clientid: '7dd33c1a56813db7f797'
 }
-const env = process.env.NODE_ENV == 'development' ? 'dev' : 'prod'
-console.log('process.env.NODE_ENV', process.env.NODE_ENV, env, configs[env], dev)
-const config = {
-  ...configs[env]
+export {
+  GITHUB_OAUTH
 }
-// console.log('config', config)
-export default config

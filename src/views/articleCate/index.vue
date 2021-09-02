@@ -24,8 +24,15 @@
                            align="center"
                            width="180">
           </el-table-column>
-          <el-table-column prop="userId"
+          <el-table-column prop="parentId"
+                           label="父级"
                            align="center"
+                           width="180">
+            <template #default="scope">
+              <span>{{getParent(scope.row.parentId)}}</span>
+            </template>
+          </el-table-column>
+          <el-table-column align="center"
                            label="是否开启">
             <template #default="scope">
               <span>{{scope.row.state == 1 ? '是': '否'}}</span>
@@ -45,12 +52,13 @@
                  ref="form"
                  :model="articleCate">
           <el-form-item label="分类"
+                        label-width="120px"
                         prop="classId">
-            <el-select v-model="info.classId"
+            <el-select v-model="articleCate.parentId"
                        style='width: 300px;'
                        placeholder="请选择分类">
               <el-option label="一级分类"
-                         :value="-1"></el-option>
+                         :value="null"></el-option>
               <el-option v-for="item in articleCateList"
                          :label="item.name"
                          :key="item._id"
@@ -107,7 +115,7 @@ export default {
           "lastModifiedDate": ""
         }
       ],
-      articleCate: { name: '' },
+      articleCate: { name: '', parentId: null },
       dialogFormVisible: false,
       fullscreenLoading: false,
       form: {
@@ -116,7 +124,8 @@ export default {
           { min: 1, max: 20, message: '长度在 1 到 20 个字符', trigger: 'blur' }
         ]
       },
-      articleCateList: []
+      articleCateList: [],
+      allList: []
     }
   },
   methods: {
@@ -124,6 +133,7 @@ export default {
       this.isEdit = false
       this.articleCate._id = ''
       this.articleCate.name = ''
+      this.articleCate.parentId = null
       this.dialogFormVisible = true
     },
     async handleSure() {
@@ -132,9 +142,9 @@ export default {
           this.fullscreenLoading = true
           let res
           if (this.isEdit) {
-            res = await articleCateAPI.edit(this.articleCate._id, { name: this.articleCate.name })
+            res = await articleCateAPI.edit({ _id: this.articleCate._id, name: this.articleCate.name, parentId: this.articleCate.parentId })
           } else {
-            res = await articleCateAPI.add({ name: this.articleCate.name })
+            res = await articleCateAPI.add({ name: this.articleCate.name, parentId: this.articleCate.parentId })
           }
           // console.log('===articleCate--res', res)
           this.dialogFormVisible = false
@@ -142,6 +152,7 @@ export default {
           this.$message(this.isEdit ? '修改成功' : '创建成功')
           this.articleCate.name = ''
           this.articleCate._id = ''
+          this.articleCate.parentId = null
           this.isEdit = false
           await this.getArticleCateList()
         } else {
@@ -153,6 +164,7 @@ export default {
       this.isEdit = true
       this.articleCate.name = item.name
       this.articleCate._id = item._id
+      this.articleCate.parentId = item.parentId
       this.dialogFormVisible = true
     },
     async getArticleCateList() {
@@ -176,11 +188,24 @@ export default {
     handleCurrentChange(val) {
       this.current = val
       this.getArticleCateList()
+    },
+    async getAllLogTypeList() {
+      const res = await articleCateAPI.getAllList()
+      const { data } = res
+      this.articleCateList = data.filter((item) => {
+        return !item.parentId
+      })
+      this.allList = data;
+    },
+    getParent(parentId) {
+      const item = this.allList.find(item => item._id === parentId) || {}
+      return item.name || '一级'
     }
   },
-  created() {
+  async created() {
     console.log('list---data')
-    this.getArticleCateList()
+    await this.getAllLogTypeList()
+    await this.getArticleCateList()
   }
 }
 </script>

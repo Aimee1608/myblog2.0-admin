@@ -126,19 +126,19 @@ const constantRoutes = [{
   }]
 },
 
-// {
-//   path: '/logType',
-//   component: Layout,
-//   children: [{
-//     path: '',
-//     name: 'LogType',
-//     component: () => import('@/views/logType/index.vue'),
-//     meta: {
-//       title: '活动类型',
-//       icon: 'form'
-//     }
-//   }]
-// },
+{
+  path: '/comment',
+  component: Layout,
+  children: [{
+    path: '',
+    name: 'Comment',
+    component: () => import('@/views/comment/index.vue'),
+    meta: {
+      title: '评论管理',
+      icon: 'el-icon-notebook-2'
+    }
+  }]
+},
 
 // {
 //   path: '/recycleBin',

@@ -6,8 +6,7 @@ import {
   getToken
 } from '@/utils/auth' // get token from cookie
 import getPageTitle from '@/utils/get-page-title'
-import config from '@/config'
-const { sso } = config
+import { GITHUB_OAUTH } from '@/config'
 NProgress.configure({
   showSpinner: false
 }) // NProgress Configuration
@@ -22,13 +21,13 @@ router.beforeEach((to, from, next) => {
 
   const hasToken = getToken()
   // console.log('hasToken', hasToken)
-  // if (hasToken) {
-  next()
-  // } else {
-  //   /* has no token*/
-  //   console.log('888')
-  //   // window.location.replace(sso.urls.login)
-  // }
+  if (hasToken) {
+    next()
+  } else {
+    /* has no token*/
+    console.log('888')
+    window.location.href = GITHUB_OAUTH.url
+  }
 })
 
 router.afterEach(() => {
