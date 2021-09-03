@@ -222,3 +222,18 @@ export function flatten(arr) {
     return result.concat(Array.isArray(item) ? flatten(item) : item)
   }, [])
 }
+
+export function copyHandle(value) {
+  var input = document.createElement('input')
+  // 赋值
+  input.setAttribute('value', value)
+  // 添加节点
+  document.body.appendChild(input)
+  // 选取文本域中的内容
+  input.select()
+  // 复制
+  document.execCommand('Copy')
+  // 删除掉没用的节点
+  document.body.removeChild(input)
+  Message({ message: '复制成功', type: 'success' })
+}

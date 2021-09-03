@@ -9,8 +9,9 @@
                   @clear="clearHandle"
                   @change="changeHandle"
                   v-model="search">
-          <i slot="suffix"
-             class="el-input__icon el-icon-search"></i>
+          <template #suffix>
+            <i class="el-input__icon el-icon-search"></i>
+          </template>
         </el-input>
       </div>
       <div class="table-box">

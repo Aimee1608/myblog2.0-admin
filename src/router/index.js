@@ -55,7 +55,7 @@ const constantRoutes = [{
     component: () => import('@/views/home/index.vue'),
     meta: {
       title: '首页概览',
-      icon: 'el-icon-notebook-2'
+      icon: 'el-icon-s-data'
     }
   }]
 },
@@ -74,7 +74,7 @@ const constantRoutes = [{
     component: () => import('@/views/list/index.vue'),
     meta: {
       title: '文章列表',
-      icon: 'el-icon-notebook-2'
+      icon: 'el-icon-document'
     }
   }]
 },
@@ -93,7 +93,7 @@ const constantRoutes = [{
     component: () => import('@/views/articleCate/index.vue'),
     meta: {
       title: '分类列表',
-      icon: 'el-icon-notebook-2'
+      icon: 'el-icon-collection-tag'
     }
   }]
 },
@@ -135,11 +135,23 @@ const constantRoutes = [{
     component: () => import('@/views/comment/index.vue'),
     meta: {
       title: '评论管理',
-      icon: 'el-icon-notebook-2'
+      icon: 'el-icon-chat-dot-round'
     }
   }]
 },
-
+{
+  path: '/resource',
+  component: Layout,
+  children: [{
+    path: '',
+    name: 'Resource',
+    component: () => import('@/views/resource/index.vue'),
+    meta: {
+      title: '资源管理',
+      icon: 'el-icon-receiving'
+    }
+  }]
+},
 // {
 //   path: '/recycleBin',
 //   component: Layout,
