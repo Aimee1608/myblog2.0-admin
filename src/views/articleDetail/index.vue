@@ -9,9 +9,7 @@
       <div>评论量 {{info.commentCount}}</div>
       <div>内容：</div>
       <div class="article-detail-content">
-        <div v-html="content">
-
-        </div>
+        <Content :content="info.content" />
       </div>
     </div>
     <div class="btn-box">
@@ -25,32 +23,16 @@
 </template>
 <script>
 
-import Marked from 'marked'
-import hljs from 'highlight.js'
-import 'highlight.js/styles/monokai-sublime.css'
+import Content from '@/components/Content'
 import articleAPI from '@/api/article'
-Marked.setOptions({
-  renderer: new Marked.Renderer(),
-  highlight(code) {
-    return hljs.highlightAuto(code).value
-  },
-  pedantic: false,
-  gfm: true,
-  tables: true,
-  breaks: false,
-  sanitize: false,
-  smartLists: true,
-  smartypants: false,
-  xhtml: false
-})
+
 export default {
   components: {
-
+    Content
   },
   data() {
     return {
       info: {},
-      content: ''
     }
   },
   async created() {
@@ -59,14 +41,8 @@ export default {
   },
   methods: {
     async getInfo(id) {
-
       const res = await articleAPI.getInfo({ id })
-      console.log('articleAPI.info---res', res)
-
       this.info = res.data
-      this.content = Marked(this.info.content)
-      console.log('this.content', this.content)
-
     },
     onSubmit() {
       this.$router.push({

@@ -24,6 +24,11 @@ export default defineConfig({
       scss: {
         modifyVars: {},
         javascriptEnabled: true
+      },
+    },
+    loaderOptions: {
+      sass: {
+        prependData: `@import "@/styles/variables.scss";`
       }
     }
   },

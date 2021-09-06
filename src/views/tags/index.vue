@@ -20,16 +20,16 @@
                            width="220">
           </el-table-column>
           <el-table-column prop="name"
-                           label="分类名称"
+                           label="标签名称"
                            align="center"
                            width="180">
           </el-table-column>
-          <el-table-column prop="parentId"
-                           label="父级"
+          <el-table-column prop="classId"
+                           label="分类"
                            align="center"
                            width="180">
             <template #default="scope">
-              <span>{{getParent(scope.row.parentId)}}</span>
+              <span>{{getParent(scope.row.classId)}}</span>
             </template>
           </el-table-column>
           <el-table-column align="center"
@@ -46,25 +46,28 @@
         </el-table>
 
       </div>
-      <el-dialog :title="(isEdit? '编辑' : '创建') + '文章类型'"
+      <el-dialog :title="(isEdit? '编辑' : '创建') + '文章标签'"
                  v-model="dialogFormVisible">
         <el-form :rules="form"
                  ref="form"
-                 :model="articleCate">
-          <el-form-item label="分类名称"
-                        prop="name"
-                        label-width="120px">
-            <el-input v-model="articleCate.name"
-                      autocomplete="off"></el-input>
+                 :model="tags">
+          <el-form-item label="所属分类"
+                        label-width="120px"
+                        prop="classId">
+            <el-select v-model="tags.classId"
+                       style='width: 300px;'
+                       placeholder="请选择分类">
+              <el-option v-for="item in tagsList"
+                         :label="item.name"
+                         :key="item._id"
+                         :value="item._id"></el-option>
+            </el-select>
           </el-form-item>
-          <el-form-item label="是否开启"
+          <el-form-item label="标签名称"
                         prop="name"
                         label-width="120px">
-            <el-switch v-model="articleCate.state"
-                       :active-value="1"
-                       :inactive-value="0"
-                       active-color="#13ce66"
-                       inactive-color="#ff4949"></el-switch>
+            <el-input v-model="tags.name"
+                      autocomplete="off"></el-input>
           </el-form-item>
         </el-form>
         <template #footer>
@@ -92,9 +95,10 @@
 <script>
 
 import articleCateAPI from '@/api/articleCate'
+import tagsAPI from '@/api/tags'
 
 export default {
-  name: 'ArticleCate',
+  name: 'Tags',
   data() {
     return {
       pageSize: 10,
@@ -110,7 +114,7 @@ export default {
           "lastModifiedDate": ""
         }
       ],
-      articleCate: { name: '' },
+      tags: { name: '', classId: null },
       dialogFormVisible: false,
       fullscreenLoading: false,
       form: {
@@ -119,14 +123,16 @@ export default {
           { min: 1, max: 20, message: '长度在 1 到 20 个字符', trigger: 'blur' }
         ]
       },
+      tagsList: [],
       allList: []
     }
   },
   methods: {
     onSubmit() {
       this.isEdit = false
-      this.articleCate._id = ''
-      this.articleCate.name = ''
+      this.tags._id = ''
+      this.tags.name = ''
+      this.tags.classId = null
       this.dialogFormVisible = true
     },
     async handleSure() {
@@ -135,19 +141,19 @@ export default {
           this.fullscreenLoading = true
           let res
           if (this.isEdit) {
-            res = await articleCateAPI.edit({ _id: this.articleCate._id, name: this.articleCate.name })
+            res = await tagsAPI.edit({ _id: this.tags._id, name: this.tags.name, classId: this.tags.classId })
           } else {
-            res = await articleCateAPI.add({ name: this.articleCate.name, state: this.articleCate.state })
+            res = await tagsAPI.add({ name: this.tags.name, classId: this.tags.classId })
           }
-          // console.log('===articleCate--res', res)
+          // console.log('===tags--res', res)
           this.dialogFormVisible = false
           this.fullscreenLoading = false
           this.$message(this.isEdit ? '修改成功' : '创建成功')
-          this.articleCate.name = ''
-          this.articleCate._id = ''
-          this.articleCate.parentId = null
+          this.tags.name = ''
+          this.tags._id = ''
+          this.tags.classId = null
           this.isEdit = false
-          await this.getArticleCateList()
+          await this.gettagsList()
         } else {
           return false
         }
@@ -155,14 +161,14 @@ export default {
     },
     editHandle(item) {
       this.isEdit = true
-      this.articleCate.name = item.name
-      this.articleCate._id = item._id
-      this.articleCate.state = item.state
+      this.tags.name = item.name
+      this.tags._id = item._id
+      this.tags.classId = item.classId
       this.dialogFormVisible = true
     },
-    async getArticleCateList() {
+    async gettagsList() {
       this.listLoading = true
-      const res = await articleCateAPI.getList({
+      const res = await tagsAPI.getList({
         pageSize: this.pageSize,
         currentPage: this.current
       })
@@ -180,22 +186,23 @@ export default {
     },
     handleCurrentChange(val) {
       this.current = val
-      this.getArticleCateList()
+      this.gettagsList()
     },
     async getAllLogTypeList() {
       const res = await articleCateAPI.getAllList()
       const { data } = res
+      this.tagsList = data
       this.allList = data;
     },
-    getParent(parentId) {
-      const item = this.allList.find(item => item._id === parentId) || {}
+    getParent(classId) {
+      const item = this.allList.find(item => item._id === classId) || {}
       return item.name
     }
   },
   async created() {
     console.log('list---data')
     await this.getAllLogTypeList()
-    await this.getArticleCateList()
+    await this.gettagsList()
   }
 }
 </script>

@@ -1,5 +1,5 @@
 import request from './index'
-const PATH = '/articleCate'
+const PATH = '/tags'
 
 function getList(params) {
   return request({
@@ -16,6 +16,7 @@ function getAllList(params) {
     params
   })
 }
+
 
 function add(data) {
   return request({

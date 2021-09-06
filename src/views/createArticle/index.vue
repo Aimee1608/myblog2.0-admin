@@ -14,10 +14,22 @@
       <el-form-item label="分类"
                     prop="classId">
         <el-select v-model="info.classId"
+                   @change="classIdChange"
                    style='width: 300px;'
                    placeholder="请选择分类">
-
           <el-option v-for="item in articleCateList"
+                     :label="item.name"
+                     :key="item._id"
+                     :value="item._id"></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="标签"
+                    prop="tags">
+        <el-select v-model="info.tags"
+                   multiple
+                   style='width: 300px;'
+                   placeholder="请选择标签">
+          <el-option v-for="item in tags"
                      :label="item.name"
                      :key="item._id"
                      :value="item._id"></el-option>
@@ -63,7 +75,8 @@
 
 import articleAPI from '@/api/article'
 import articleCateAPI from '@/api/articleCate'
-import Content from './components/content'
+import Content from '@/components/Content'
+import tagsAPI from '@/api/tags'
 export default {
   name: 'AddArticle',
   components: { // 定义组件
@@ -75,7 +88,8 @@ export default {
       info: {
         title: '',
         classId: '',
-        content: ''
+        content: '',
+        tags: []
       },
       baseRules: {
         title: [
@@ -89,15 +103,14 @@ export default {
           { required: true, message: '请输入文章内容', trigger: 'blur' }
         ]
       },
-      articleCateList: []
+      articleCateList: [],
+      tags: []
     }
-  },
-  computed: {
-
   },
   async created() { // 生命周期函数
     this.id = this.$route.query.id
     await this.getAllLogTypeList()
+    await this.getAllTagsList()
     if (this.id) {
       await this.getInfo(this.id)
     }
@@ -123,7 +136,7 @@ export default {
       }
     },
     cancle() {
-      this.$router.go(-1)
+      this.$router.push('/list')
     },
     async getInfo(id) {
 
@@ -139,6 +152,20 @@ export default {
       const { data } = res
       this.articleCateList = data
     },
+    async getAllTagsList() {
+      const res = await tagsAPI.getAllList()
+      const { data } = res
+      this.allTags = data
+    },
+    filterTags(classId) {
+      const tags = this.allTags.filter(item => {
+        return item.classId === classId
+      })
+      this.tags = tags;
+    },
+    classIdChange(value) {
+      this.filterTags(value)
+    }
   }
 }
 </script>

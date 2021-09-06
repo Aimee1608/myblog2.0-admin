@@ -123,7 +123,6 @@ export default {
       this.list = [...this.dataNormalFiles, ...this.maxFiles]
       this.showBtn = 0
       const fileList = await Promise.all(requestQueue)
-      // const res = await resourceAPI.uploadResource({ files: JSON.stringify(fileList) })
       console.log('fileList', fileList)
       this.dataNormalFiles.forEach(file => {
         file.stat = '上传成功'

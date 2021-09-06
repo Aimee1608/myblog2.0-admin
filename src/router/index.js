@@ -81,12 +81,6 @@ const constantRoutes = [{
 {
   path: '/articleCate',
   component: Layout,
-  // redirect: '/list',
-  // name: 'List',
-  // component: () => import('@/views/table/index'),
-  // meta: { title: '文档中心', icon: 'table' },
-  // name: 'Example',
-  // meta: { title: '文档中心', icon: 'el-icon-s-help' },
   children: [{
     path: '',
     name: 'ArticleCate',
@@ -94,6 +88,19 @@ const constantRoutes = [{
     meta: {
       title: '分类列表',
       icon: 'el-icon-collection-tag'
+    }
+  }]
+},
+{
+  path: '/tags',
+  component: Layout,
+  children: [{
+    path: '',
+    name: 'Tags',
+    component: () => import('@/views/tags/index.vue'),
+    meta: {
+      title: '标签列表',
+      icon: 'el-icon-price-tag'
     }
   }]
 },
