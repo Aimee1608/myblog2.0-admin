@@ -145,6 +145,7 @@ import _ from 'lodash'
 import articleAPI from '@/api/article'
 import articleCateAPI from '@/api/articleCate'
 import { initDate } from '@/utils'
+import Moment from 'moment'
 export default {
   data() {
     return {
@@ -167,6 +168,12 @@ export default {
   async created() {
     await this.getAllLogTypeList()
     await this.getList()
+    const ot = "13/3/2018 10:42:55"
+    const h = ot.split(' ')[1]
+    const y = ot.split(' ')[0].split('/')
+
+    const t = Moment(`${y[2]}-${y[1]}-${y[0]} ${h}`)
+    console.log('t', t)
   },
   methods: {
     filterName(value) {

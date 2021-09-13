@@ -75,7 +75,7 @@
 
 import articleAPI from '@/api/article'
 import articleCateAPI from '@/api/articleCate'
-import Content from '@/components/Content'
+import Content from '@/components/Content/index.vue'
 import tagsAPI from '@/api/tags'
 export default {
   name: 'AddArticle',

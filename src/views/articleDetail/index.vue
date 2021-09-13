@@ -23,7 +23,7 @@
 </template>
 <script>
 
-import Content from '@/components/Content'
+import Content from '@/components/Content/index.vue'
 import articleAPI from '@/api/article'
 
 export default {

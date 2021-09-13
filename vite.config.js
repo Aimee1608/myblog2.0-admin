@@ -17,7 +17,7 @@ export default defineConfig({
     alias: {
       '@': resolve('src')
     },
-    extensions: ['.vue', '.js', '.json', '.mjs']
+    extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json', '.vue']
   },
   css: {
     preprocessorOptions: {
