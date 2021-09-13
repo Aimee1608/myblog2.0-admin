@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "npx --max_old_space_size=4096 vite build",
     "serve": "vite preview"
   },
   "dependencies": {
