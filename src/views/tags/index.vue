@@ -41,6 +41,12 @@
           <el-table-column label="操作">
             <template #default="scope">
               <el-button @click="editHandle(scope.row)">编辑 </el-button>
+              <el-popconfirm title="确定删除吗？"
+                             @confirm="deleteHandle(scope.row)">
+                <template #reference>
+                  <el-button>删除 </el-button>
+                </template>
+              </el-popconfirm>
             </template>
           </el-table-column>
         </el-table>
@@ -55,7 +61,7 @@
                         label-width="120px"
                         prop="classId">
             <el-select v-model="tags.classId"
-                       style='width: 300px;'
+                       style="width: 300px;"
                        placeholder="请选择分类">
               <el-option v-for="item in tagsList"
                          :label="item.name"
@@ -83,7 +89,7 @@
     <div class="log-type-pagination-container">
       <el-pagination background
                      :page-size="pageSize"
-                     :current-page.sync="current"
+                     v-model:current-page="current"
                      layout="prev, pager, next"
                      @current-change="handleCurrentChange"
                      :total="total">
@@ -108,10 +114,10 @@ export default {
       listLoading: false,
       list: [
         {
-          "_id": "1",
-          "name": "业务类型名称",
-          "createdAt": "444",
-          "lastModifiedDate": ""
+          _id: '1',
+          name: '业务类型名称',
+          createdAt: '444',
+          lastModifiedDate: ''
         }
       ],
       tags: { name: '', classId: null },
@@ -166,6 +172,11 @@ export default {
       this.tags.classId = item.classId
       this.dialogFormVisible = true
     },
+    async deleteHandle(item) {
+      const res = await tagsAPI.remove({ _id: item._id })
+      this.$message('删除成功')
+      await this.gettagsList()
+    },
     async gettagsList() {
       this.listLoading = true
       const res = await tagsAPI.getList({
@@ -192,7 +203,7 @@ export default {
       const res = await articleCateAPI.getAllList()
       const { data } = res
       this.tagsList = data
-      this.allList = data;
+      this.allList = data
     },
     getParent(classId) {
       const item = this.allList.find(item => item._id === classId) || {}

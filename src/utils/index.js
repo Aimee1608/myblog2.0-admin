@@ -117,17 +117,17 @@ export function param2Obj(url) {
 }
 
 export function getDateArr(searchType) {
-  let myDate = new Date(); //获取今天日期
-  myDate.setDate(myDate.getDate() - Number(searchType - 1));
-  let dateArray = [];
-  let dateTemp;
-  let flag = 1;
+  const myDate = new Date() // 获取今天日期
+  myDate.setDate(myDate.getDate() - Number(searchType - 1))
+  const dateArray = []
+  let dateTemp
+  const flag = 1
   for (let i = 0; i < Number(searchType); i++) {
-    dateTemp = (myDate.getFullYear()) + '-' + (myDate.getMonth() + 1) + '-' + myDate.getDate();
-    dateArray.push(Moment(new Date(dateTemp)).format('YYYY-MM-DD'));
-    myDate.setDate(myDate.getDate() + flag);
+    dateTemp = (myDate.getFullYear()) + '-' + (myDate.getMonth() + 1) + '-' + myDate.getDate()
+    dateArray.push(Moment(new Date(dateTemp)).format('YYYY-MM-DD'))
+    myDate.setDate(myDate.getDate() + flag)
   }
-  return dateArray;
+  return dateArray
 }
 
 export function getDateArrayBySpace(startDate, endDate, space) {
@@ -142,23 +142,23 @@ export function getDateArrayBySpace(startDate, endDate, space) {
   } else {
     space = space * 60 * 1000
   }
-  var endTime = endDate.getTime()
-  var startTime = startDate.getTime()
-  var mod = endTime - startTime
+  const endTime = endDate.getTime()
+  let startTime = startDate.getTime()
+  let mod = endTime - startTime
   if (mod <= space) {
-    alert("时间太短")
+    alert('时间太短')
     return
   }
-  var dateArray = []
+  const dateArray = []
   while (mod >= space) {
-    var d = new Date()
+    const d = new Date()
     d.setTime(startTime + space)
     dateArray.push(d.getTime())
     mod = mod - space
     startTime = startTime + space
   }
-  var end = endDate.getTime()
-  var start = startDate.getTime()
+  const end = endDate.getTime()
+  const start = startDate.getTime()
   // const dt = space === 1440 ? new Date(start).format('MM-DD') : new Date(start).format('MM-DD HH:mm:ss')
   const dt = new Date(start).getTime()
   // console.log('dt=========', dt)
@@ -224,7 +224,7 @@ export function flatten(arr) {
 }
 
 export function copyHandle(value) {
-  var input = document.createElement('input')
+  const input = document.createElement('input')
   // 赋值
   input.setAttribute('value', value)
   // 添加节点

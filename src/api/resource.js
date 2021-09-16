@@ -23,7 +23,7 @@ function uploadFile(data) {
     url: `${PATH}/upload`,
     method: 'post',
     data,
-    headers: { "Content-Type": "*" }
+    headers: { 'Content-Type': '*' }
   })
 }
 

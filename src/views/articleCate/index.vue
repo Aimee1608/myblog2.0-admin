@@ -24,14 +24,6 @@
                            align="center"
                            width="180">
           </el-table-column>
-          <el-table-column prop="parentId"
-                           label="父级"
-                           align="center"
-                           width="180">
-            <template #default="scope">
-              <span>{{getParent(scope.row.parentId)}}</span>
-            </template>
-          </el-table-column>
           <el-table-column align="center"
                            label="是否开启">
             <template #default="scope">
@@ -41,6 +33,12 @@
           <el-table-column label="操作">
             <template #default="scope">
               <el-button @click="editHandle(scope.row)">编辑 </el-button>
+              <el-popconfirm title="确定删除吗？"
+                             @confirm="deleteHandle(scope.row)">
+                <template #reference>
+                  <el-button>删除 </el-button>
+                </template>
+              </el-popconfirm>
             </template>
           </el-table-column>
         </el-table>
@@ -80,7 +78,7 @@
     <div class="log-type-pagination-container">
       <el-pagination background
                      :page-size="pageSize"
-                     :current-page.sync="current"
+                     v-model:current-page="current"
                      layout="prev, pager, next"
                      @current-change="handleCurrentChange"
                      :total="total">
@@ -104,10 +102,10 @@ export default {
       listLoading: false,
       list: [
         {
-          "_id": "1",
-          "name": "业务类型名称",
-          "createdAt": "444",
-          "lastModifiedDate": ""
+          _id: '1',
+          name: '业务类型名称',
+          createdAt: '444',
+          lastModifiedDate: ''
         }
       ],
       articleCate: { name: '' },
@@ -160,6 +158,11 @@ export default {
       this.articleCate.state = item.state
       this.dialogFormVisible = true
     },
+    async deleteHandle(item) {
+      const res = await articleCateAPI.remove({ _id: item._id })
+      this.$message('删除成功')
+      await this.getArticleCateList()
+    },
     async getArticleCateList() {
       this.listLoading = true
       const res = await articleCateAPI.getList({
@@ -181,20 +184,10 @@ export default {
     handleCurrentChange(val) {
       this.current = val
       this.getArticleCateList()
-    },
-    async getAllLogTypeList() {
-      const res = await articleCateAPI.getAllList()
-      const { data } = res
-      this.allList = data;
-    },
-    getParent(parentId) {
-      const item = this.allList.find(item => item._id === parentId) || {}
-      return item.name
     }
   },
   async created() {
     console.log('list---data')
-    await this.getAllLogTypeList()
     await this.getArticleCateList()
   }
 }

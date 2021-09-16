@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <div style="margin: 10px 0;">
-      <el-input placeholder="请输入文章ID"
+      <el-input placeholder="请输入留言ID"
                 style="width: 600px;"
                 clearable
                 @keyup.enter.native="searchEnterFun"
@@ -61,7 +61,16 @@
                          width="200">
           <template #default="scope">
             <el-button @click="editHandle(scope.row)"
-                       type="text">编辑状态</el-button>
+                       type="primary"
+                       plain>编辑状态</el-button>
+            <el-popconfirm title="确定删除吗？"
+                           @confirm="deleteHandle(scope.row)">
+              <template #reference>
+                <el-button type="danger"
+                           @click="deleteHandle(scope.row)"
+                           plain>删除</el-button>
+              </template>
+            </el-popconfirm>
           </template>
         </el-table-column>
       </el-table>
@@ -69,7 +78,7 @@
     <div class="pagination-container">
       <el-pagination background
                      :page-size="pageSize"
-                     :current-page.sync="current"
+                     v-model:current-page="current"
                      layout="prev, pager, next"
                      @current-change="handleCurrentChange"
                      :total="total">
@@ -164,14 +173,16 @@ export default {
       console.log('articleAPI.add---res', res)
       if (res.code == 0) {
         this.$message({ message: '修改成功', type: 'success' })
-        this.list[index] = info
       } else {
         this.$message({ message: '修改失败', type: 'error' })
       }
+      await this.getList()
     },
-    async edit(info, index) {
-
-    },
+    async deleteHandle(item) {
+      const res = await commentAPI.remove({ _id: item._id })
+      this.$message('删除成功')
+      await this.getList()
+    }
   }
 }
 </script>

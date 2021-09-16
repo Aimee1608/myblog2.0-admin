@@ -33,13 +33,6 @@
                          label="文章标题">
           <template #default="scope"> {{ scope.row.title }} </template>
         </el-table-column>
-        <el-table-column label="文章截图"
-                         width="220">
-          <template #default="scope">
-            <img class="list-image"
-                 :src="scope.row.image" />
-          </template>
-        </el-table-column>
         <el-table-column label="所属类别"
                          width="140"
                          align="center">
@@ -114,8 +107,7 @@
                                     command="errorData">错误数据</el-dropdown-item> -->
                   <el-dropdown-item command="isHot">{{scope.row.isHot?'关闭': '开启'}}热门</el-dropdown-item>
                   <el-dropdown-item command="state">{{scope.row.state?'禁用': '启用'}}</el-dropdown-item>
-                  <!-- <el-dropdown-item v-if="userId === log.userId || role === 'admin' || role === 'superAdmin'"
-                                      command="delete">删除</el-dropdown-item> -->
+                  <el-dropdown-item command="delete">删除</el-dropdown-item>
                 </el-dropdown-menu>
               </template>
             </el-dropdown>
@@ -127,7 +119,7 @@
     <div class="pagination-container">
       <el-pagination background
                      :page-size="pageSize"
-                     :current-page.sync="current"
+                     v-model:current-page="current"
                      layout="prev, pager, next"
                      @current-change="handleCurrentChange"
                      :total="total">
@@ -168,7 +160,7 @@ export default {
   async created() {
     await this.getAllLogTypeList()
     await this.getList()
-    const ot = "13/3/2018 10:42:55"
+    const ot = '13/3/2018 10:42:55'
     const h = ot.split(' ')[1]
     const y = ot.split(' ')[0].split('/')
 
@@ -248,15 +240,29 @@ export default {
     },
     async articleEditHandle(command, log, index) {
       const detail = _.cloneDeep(log)
-      if (command === 'isRecommend') {
-        detail.isRecommend = detail.isRecommend === 1 ? 0 : 1
-      } else if (command === 'isHot') {
-        detail.isHot = detail.isHot === 1 ? 0 : 1
-      } else if (command === 'state') {
-        detail.state = detail.state === 1 ? 0 : 1
+      if (command === 'delete') {
+        this.$confirm('确定删除吗', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.deleteHandle(log)
+        })
+      } else {
+        if (command === 'isRecommend') {
+          detail.isRecommend = detail.isRecommend === 1 ? 0 : 1
+        } else if (command === 'isHot') {
+          detail.isHot = detail.isHot === 1 ? 0 : 1
+        } else if (command === 'state') {
+          detail.state = detail.state === 1 ? 0 : 1
+        }
+        await this.edit(detail, index)
       }
-      await this.edit(detail, index)
-
+    },
+    async deleteHandle(item) {
+      const res = await articleAPI.remove({ _id: item._id })
+      this.$message('删除成功')
+      await this.getList()
     },
     async edit(info, index) {
       const res = await articleAPI.edit(info)
@@ -272,7 +278,7 @@ export default {
       const res = await articleCateAPI.getAllList()
       const { data } = res
       this.articleCateList = data
-    },
+    }
   }
 }
 </script>

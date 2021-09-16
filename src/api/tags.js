@@ -34,9 +34,18 @@ function edit(data) {
   })
 }
 
+function remove(data) {
+  return request({
+    url: `${PATH}/delete`,
+    method: 'post',
+    data
+  })
+}
+
 export default {
   getList,
   getAllList,
   add,
-  edit
+  edit,
+  remove
 }

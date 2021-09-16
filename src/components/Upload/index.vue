@@ -108,7 +108,7 @@ export default {
             this.maxFiles.push(obj)
           } else {
             this.dataNormalFiles.push(obj)
-            var params = new FormData();
+            const params = new FormData()
             params.append('name', file.name)
             params.append('file', file)
             requestQueue.push(resourceAPI.uploadFile(params))

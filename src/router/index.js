@@ -1,7 +1,7 @@
 // import * as Vue from 'vue'
 // import Router from 'vue-router'
 
-import { createRouter, createWebHashHistory } from "vue-router";
+import { createRouter, createWebHashHistory } from 'vue-router'
 
 /* Layout */
 import Layout from '@/layout/index.vue'
@@ -193,6 +193,7 @@ const constantRoutes = [{
 }]
 
 const router = createRouter({
+  base: '/admin2.0',
   scrollBehavior: () => ({
     y: 0
   }),

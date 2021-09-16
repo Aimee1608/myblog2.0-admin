@@ -52,7 +52,7 @@
     <div class="resource-pagination-container">
       <el-pagination background
                      :page-size="pageSize"
-                     :current-page.sync="current"
+                     v-model:current-page="current"
                      layout="prev, pager, next"
                      @current-change="handleCurrentChange"
                      :total="total">

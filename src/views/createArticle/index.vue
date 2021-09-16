@@ -161,7 +161,7 @@ export default {
       const tags = this.allTags.filter(item => {
         return item.classId === classId
       })
-      this.tags = tags;
+      this.tags = tags
     },
     classIdChange(value) {
       this.filterTags(value)

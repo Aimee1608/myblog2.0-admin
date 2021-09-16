@@ -24,7 +24,7 @@ router.beforeEach((to, from, next) => {
   if (hasToken) {
     next()
   } else {
-    /* has no token*/
+    /* has no token */
     console.log('888')
     window.location.href = GITHUB_OAUTH.url
   }

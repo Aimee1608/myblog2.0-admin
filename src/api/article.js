@@ -33,9 +33,26 @@ function edit(data) {
   })
 }
 
+function remove(data) {
+  return request({
+    url: `${PATH}/delete`,
+    method: 'post',
+    data
+  })
+}
+
+function getHomeInfo(params) {
+  return request({
+    url: `${PATH}/getHomeInfo`,
+    method: 'get',
+    params
+  })
+}
 export default {
   getList,
   getInfo,
   add,
-  edit
+  edit,
+  getHomeInfo,
+  remove
 }
