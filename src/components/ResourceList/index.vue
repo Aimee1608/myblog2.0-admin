@@ -27,18 +27,18 @@
               <div class="resource-bottom">
                 <span class="resource-bottom-name">{{item.name}}</span>
                 <div class="resource-bottom-handle">
-                  <el-link type="primary"
-                           :underline="false"
-                           @click="copyHandle(item.url)">
+                  <el-button type="text"
+                             :underline="false"
+                             @click="copyHandle(item.url)">
                     <i class="el-icon-document-copy"></i>
-                  </el-link>
+                  </el-button>
                   <el-popconfirm @confirm="deleteHandle(item)"
                                  :title="'确定删除  '+item.name + '  吗？'">
                     <template #reference>
-                      <el-link type="primary"
-                               :underline="false">
+                      <el-button type="text"
+                                 :underline="false">
                         <i class="el-icon-delete"></i>
-                      </el-link>
+                      </el-button>
                     </template>
                   </el-popconfirm>
 
@@ -119,7 +119,7 @@ export default {
       this.$emit('selectHandle', item)
     },
     async deleteHandle(item) {
-      const res = await resourceAPI.deleteResource(item._id)
+      const res = await resourceAPI.deleteResource({ _id: item._id })
       if (res.code == 0) {
         this.$message({
           message: '删除成功',

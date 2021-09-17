@@ -2,7 +2,7 @@
   <!-- 添加文章 -->
   <div class="wrap">
     <el-form ref="baseRules"
-             class="form-width"
+             class="create-form"
              :rules="baseRules"
              :model="info"
              label-width="120px">
@@ -146,6 +146,7 @@ export default {
       this.info = res.data
       // this.contentValue = Marked(this.info.content)
       console.log('this.content', this.content)
+      this.classIdChange(this.info.classId)
     },
     async getAllLogTypeList() {
       const res = await articleCateAPI.getAllList()
@@ -181,14 +182,26 @@ export default {
   // height: 600px;
   margin: 0 auto;
 }
-
+.editor {
+  height: 100%;
+  textarea {
+    height: 100%;
+  }
+}
 .editor,
 .show {
   // width: 550px;
   height: 600px;
   border: 1px solid #666;
 }
+.show {
+  padding: 0 10px;
+  background: #fff;
+}
 .btn-box {
   text-align: center;
+}
+.create-form {
+  padding-top: 10px;
 }
 </style>

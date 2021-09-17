@@ -69,7 +69,8 @@ export default {
       list: [],
       dataNormalFiles: [],
       maxFiles: [],
-      showBtn: -1
+      showBtn: -1,
+      fileValue: null
     }
   },
   created() {
@@ -130,6 +131,7 @@ export default {
       this.list = [...this.dataNormalFiles, ...this.maxFiles]
       this.showBtn = 1
       this.$emit('updataList')
+      this.$refs.picker.value = ''
     },
     getFileSize(file) {
       const size = file.size < (1024 * 1024) ? `${(file.size / 1024).toFixed(1)}KB` : `${(file.size / (1024 * 1024)).toFixed(1)}M`
@@ -144,12 +146,16 @@ export default {
       this.showBtn = -1
       this.list = []
       this.targetFiles = []
+      this.dataNormalFiles = []
+      this.maxFiles = []
       this.dialogFormVisible = true
     },
     handleSure() {
       this.dialogFormVisible = false
       this.targetFiles = []
       this.list = []
+      this.dataNormalFiles = []
+      this.maxFiles = []
       this.showBtn = -1
     },
     selectHandle() {

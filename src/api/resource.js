@@ -27,11 +27,13 @@ function uploadFile(data) {
   })
 }
 
+
 // 删除
-function deleteResource(id) {
+function deleteResource(data) {
   return request({
-    url: `${PATH}/${id}`,
-    method: 'delete'
+    url: `${PATH}/delete`,
+    method: 'post',
+    data
   })
 }
 
