@@ -1,7 +1,5 @@
-/**
- * Created by PanJiaChen on 16/11/18.
- */
 import Moment from 'moment'
+import { ElMessage } from 'element-plus'
 /**
  * Parse the time to string
  * @param {(Object|string|number)} time
@@ -235,5 +233,5 @@ export function copyHandle(value) {
   document.execCommand('Copy')
   // 删除掉没用的节点
   document.body.removeChild(input)
-  Message({ message: '复制成功', type: 'success' })
+  ElMessage({ message: '复制成功', type: 'success' })
 }
