@@ -6,7 +6,7 @@
 <script>
 import Marked from 'marked'
 import hljs from 'highlight.js'
-import 'highlight.js/styles/monokai-sublime.css'
+import 'highlight.js/styles/github.css'
 Marked.setOptions({
   renderer: new Marked.Renderer(),
   highlight(code) {
