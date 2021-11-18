@@ -2,7 +2,7 @@ import axios from 'axios'
 import {
   ElMessage as Message
 } from 'element-plus'
-const baseURL = process.env.NODE_ENV === 'development' ? 'v1' : '//mangoya.cn/v1'
+const baseURL = process.env.NODE_ENV === 'development' ? 'v1' : '/v1'
 // let baseURL = 'https://www.fastmock.site/mock/b8c91f9e258f7613a7e08ed643f7cdb5/logs'
 // create an axios instance
 const service = axios.create({
