@@ -8,7 +8,7 @@ function resolve(dir) {
 }
 export default defineConfig({
   plugins: [
-    vue(),
+    vue()
     // eslintPlugin({
     //   include: ['src/**/*.vue'] // 检查的文件
     // })
@@ -24,11 +24,11 @@ export default defineConfig({
       scss: {
         modifyVars: {},
         javascriptEnabled: true
-      },
+      }
     }
   },
   server: {
-    host: 'mangoya.cn',
+    host: 'aimeeadmin.mangoya.cn',
     port: 8088,
     // 是否自动在浏览器打开
     open: true,
@@ -37,10 +37,10 @@ export default defineConfig({
     // 反向代理
     proxy: {
       '/v1': {
-        target: 'http://mangoya.cn:8899/v1',
+        target: 'http://aimeeserver.mangoya.cn:8899/v1',
         ws: true,
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/v1/, '')
+        rewrite: path => path.replace(/^\/v1/, '')
       }
     },
     fs: {
@@ -48,12 +48,12 @@ export default defineConfig({
       strict: true,
       allow: ['..']
     },
-    cors: true,
+    cors: true
     // hmr: { overlay: false }
   },
 
   build: {
-    outDir: 'dist',//Specify the output directory (relative to project root).
+    outDir: 'dist' // Specify the output directory (relative to project root).
   },
   /**
    * 在生产中服务时的基本公共路径。

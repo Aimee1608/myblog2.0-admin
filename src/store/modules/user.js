@@ -1,12 +1,5 @@
-import {
-  logout,
-  getInfo
-} from '@/api/user'
-import {
-  getToken,
-
-  removeToken
-} from '@/utils/auth'
+import { logout, getInfo } from '@/api/user'
+import { getToken, removeToken } from '@/utils/auth'
 
 import { GITHUB_OAUTH } from '@/config'
 
@@ -24,7 +17,7 @@ const getDefaultState = () => {
 const defaultState = getDefaultState()
 
 const mutations = {
-  RESET_STATE: (state) => {
+  RESET_STATE: state => {
     Object.assign(state, getDefaultState())
   },
   SET_TOKEN: (state, token) => {
@@ -52,65 +45,52 @@ const mutations = {
 
 const actions = {
   // user login
-  login({
-    commit
-  }) {
+  login({ commit }) {
     window.location.href = GITHUB_OAUTH.url
   },
 
   // get user info
-  getInfo({
-    commit,
-    state
-  }) {
+  getInfo({ commit, state }) {
     return new Promise((resolve, reject) => {
-      getInfo(state.token).then(response => {
-        const {
-          data
-        } = response
-        // console.log(data)
-        if (!data) {
-          return reject('Verification failed, please Login again.')
-        }
-        const {
-          userId,
-          username,
-          status,
-          avatar
-        } = data
-        commit('SET_ID', userId)
-        commit('SET_NAME', username)
-        commit('SET_ROLE', status)
-        commit('SET_AVATAR', avatar)
-        resolve(data)
-      }).catch(error => {
-        reject(error)
-      })
+      getInfo(state.token)
+        .then(response => {
+          const { data } = response
+          // console.log(data)
+          if (!data) {
+            return reject('Verification failed, please Login again.')
+          }
+          const { userId, username, status, avatar } = data
+          commit('SET_ID', userId)
+          commit('SET_NAME', username)
+          commit('SET_ROLE', status)
+          commit('SET_AVATAR', avatar)
+          resolve(data)
+        })
+        .catch(error => {
+          reject(error)
+        })
     })
   },
 
   // user logout
-  logout({
-    commit,
-    state
-  }) {
+  logout({ commit, state }) {
     return new Promise((resolve, reject) => {
-      logout(state.token).then(() => {
-        removeToken() // must remove  token  first
-        window.location.replace(sso.urls.logout)
-        // resetRouter()
-        // commit('RESET_STATE')
-        resolve()
-      }).catch(error => {
-        reject(error)
-      })
+      logout(state.token)
+        .then(() => {
+          removeToken() // must remove  token  first
+          window.location.reload()
+          // resetRouter()
+          // commit('RESET_STATE')
+          resolve()
+        })
+        .catch(error => {
+          reject(error)
+        })
     })
   },
 
   // remove token
-  resetToken({
-    commit
-  }) {
+  resetToken({ commit }) {
     return new Promise(resolve => {
       removeToken() // must remove  token  first
       commit('RESET_STATE')
