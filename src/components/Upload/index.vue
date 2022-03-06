@@ -1,58 +1,33 @@
 <template>
-
-  <el-dialog title="上传图片"
-             append-to-body
-             v-model="dialogFormVisible">
+  <el-dialog title="上传图片" append-to-body v-model="dialogFormVisible">
     <div class="upload-box">
-      <div class="avatar-uploader"
-           @click="selectHandle"
-           v-show="showBtn == -1">
+      <div class="avatar-uploader" @click="selectHandle" v-show="showBtn == -1">
         <div class="el-upload">
           <i class="el-icon-plus avatar-uploader-icon"></i>
-          <input ref="picker"
-                 v-show="false"
-                 multiple
-                 type="file"
-                 accept="image/*"
-                 @change="beforeAvatarUpload" />
+          <input ref="picker" v-show="false" multiple type="file" accept="image/*" @change="beforeAvatarUpload" />
         </div>
       </div>
 
-      <el-table :data="list"
-                v-show="showBtn != -1"
-                max-height="400"
-                style="width: 100%">
-        <el-table-column label="文件"
-                         width="180">
+      <el-table :data="list" v-show="showBtn != -1" max-height="400" style="width: 100%">
+        <el-table-column label="文件" width="180">
           <template #default="scope">
             <div class="upload-table-image">
               <img :src="scope.row.filePicture" />
             </div>
           </template>
         </el-table-column>
-        <el-table-column prop="name"
-                         label="名称"
-                         width="180">
-        </el-table-column>
-        <el-table-column prop="size"
-                         label="大小">
-        </el-table-column>
-        <el-table-column prop="stat"
-                         label="状态">
-        </el-table-column>
+        <el-table-column prop="name" label="名称" width="180"></el-table-column>
+        <el-table-column prop="size" label="大小"></el-table-column>
+        <el-table-column prop="stat" label="状态"></el-table-column>
       </el-table>
     </div>
     <template #footer>
       <div class="dialog-footer">
-        <el-button v-show="showBtn == 1"
-                   @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary"
-                   v-loading.fullscreen.lock="fullscreenLoading"
-                   @click="handleSure">确 定</el-button>
+        <el-button v-show="showBtn == 1" @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" v-loading.fullscreen.lock="fullscreenLoading" @click="handleSure">确 定</el-button>
       </div>
     </template>
   </el-dialog>
-
 </template>
 <script>
 // import { uploadFile } from '@/utils/upload'
@@ -73,14 +48,33 @@ export default {
       fileValue: null
     }
   },
-  created() {
+  mounted() {
+    document.addEventListener('paste', this.paseEvent)
+  },
+  beforeUnmount() {
+    document.removeEventListener('paste', this.paseEvent)
   },
   methods: {
+    paseEvent(event) {
+      const items = event.clipboardData.items
+      console.log(items[0], items[1])
+      if (items && items.length > 0) {
+        const files = []
+        const newItems = [...items]
+        newItems.forEach(item => {
+          if (item.type.indexOf('image') > -1) {
+            // console.log('file', item.getAsFile())
+            files.push(item.getAsFile())
+          }
+        })
+        this.beforeAvatarUpload({ target: { files } })
+      }
+    },
     beforeAvatarUpload(e) {
       const targetFiles = []
       // console.log('file', e, e.target.files)
       const fileList = e.target.files
-      Object.values(fileList).forEach((targetFile) => {
+      Object.values(fileList).forEach(targetFile => {
         // const targetFile = targetFiles.raw
         // console.log('targetFile', targetFile.raw)
         const file = new File([targetFile], targetFile.name.replace(/_/g, '-'), { type: targetFile.type })
@@ -102,7 +96,9 @@ export default {
         obj.name = file.name
         obj.size = this.getFileSize(file)
         obj.filePicture = this.getObjectURL(file)
-        const res = (/\.json$|\.pdf$|\.doc$|\.docx$|\.xls$|\.xlsx$|\.txt$|\.jpg$|\.jpeg$|\.gif$|\.svg$|\.png$|\.mp3$|\.mp4$|\.m3u8$/i).test(obj.name)
+        const res = /\.json$|\.pdf$|\.doc$|\.docx$|\.xls$|\.xlsx$|\.txt$|\.jpg$|\.jpeg$|\.gif$|\.svg$|\.png$|\.mp3$|\.mp4$|\.m3u8$/i.test(
+          obj.name
+        )
         if (res) {
           if (file.size > 2 * 1024 * 1024) {
             obj.stat = '上传失败'
@@ -130,11 +126,13 @@ export default {
       })
       this.list = [...this.dataNormalFiles, ...this.maxFiles]
       this.showBtn = 1
-      this.$emit('updataList')
-      this.$refs.picker.value = ''
+      this.$emit('updataList', fileList)
+      if (this.$refs.picker) {
+        this.$refs.picker.value = ''
+      }
     },
     getFileSize(file) {
-      const size = file.size < (1024 * 1024) ? `${(file.size / 1024).toFixed(1)}KB` : `${(file.size / (1024 * 1024)).toFixed(1)}M`
+      const size = file.size < 1024 * 1024 ? `${(file.size / 1024).toFixed(1)}KB` : `${(file.size / (1024 * 1024)).toFixed(1)}M`
       return size
     },
     getObjectURL(file) {
@@ -163,7 +161,6 @@ export default {
     }
   }
 }
-
 </script>
 <style lang="scss">
 .avatar-uploader {
